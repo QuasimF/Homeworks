@@ -1,0 +1,125 @@
+from importlib.resources import path
+import pathlib
+from abc import ABC, abstractmethod
+
+class VideoExporter(ABC):
+    @abstractmethod
+    def prepare_export(self,video_data):
+        """Prepares video data for exporting."""
+        
+    @abstractmethod
+    def do_export(self, folder: pathlib.Path):
+        """Exports the video data to a folder."""
+        
+class LossLessVideoExporter(VideoExporter):
+    """Lossless video exporting codec."""
+    
+    def prepare_export(self, video_data):
+        print("Preparing video data for lossless ") 
+        
+    def do_export(self, folder: pathlib.Path):
+        print(f"Exporting video data in lossless format to {folder}.")
+        
+class LowQualityVideoExporter(VideoExporter):
+    """Low Quality video with lower baseline profile"""
+    
+    def prepare_export(self, video_data):
+        print("Preparing video data for low Quality export.")
+        
+    def do_export(self, folder:pathlib.Path):
+        print(f"Exporting video data in low Quality to {folder}.")
+        
+class HighQualityVideoExporter(VideoExporter):
+    """High Quality video with High Baseline profile"""
+    
+    def prepare_export(self, video_data):
+        print("Preparing video data for High Quality export")
+        
+    def do_export(self, folder: pathlib.Path):
+        print(f"Exporting video data in High Quality export to {folder}")
+
+class AudioExporter(ABC):
+    @abstractmethod
+    def prepare_export(self,audio_data):
+        """Prepares Audio data for exporting"""
+
+    @abstractmethod
+    def do_export(self, folder:pathlib.Path):
+        """Exports the audio data to a folder"""
+
+class HighQualityAudioExporter(AudioExporter):
+    def prepare_export(self, audio_data):
+        print("Preparing audio data for High Quality export")
+
+    def do_export(self, folder: pathlib.Path):
+        print(f"Exporting audio data in High Quality to {folder}")
+
+class LowQualityAudioExporter(AudioExporter):
+    def prepare_export(self, audio_data):
+        print("Prepaeing audio data for LowQuality")
+    
+    def do_export(self, folder: pathlib.Path):
+        print(f"Exporting audio data in Low Quality format to {folder}.")
+
+
+class ExporterFactory(ABC):
+        
+        def get_video_exporter(self) -> VideoExporter:
+            """Returns a new video exporter instance."""
+            
+        def get_audio_exporter(self) -> AudioExporter:
+            """Returns a new audio exporter instance."""
+
+class FastExporter(ExporterFactory):
+
+    def get_video_exporter(self) -> VideoExporter:
+        return LowQualityVideoExporter()
+    
+    def get_audio_exporter(self) -> AudioExporter:
+        return LowQualityAudioExporter()
+ 
+    
+class HighQualityExporter(ExporterFactory):
+
+    def get_video_exporter(self) -> VideoExporter:
+        return HighQualityVideoExporter()
+    
+    def get_audio_exporter(self) -> AudioExporter:
+        return HighQualityAudioExporter()
+    
+    
+def read_exporter() -> ExporterFactory:
+    factories = {
+        "low": FastExporter(),
+        "high": HighQualityExporter()
+        }
+    
+    while True:
+        export_quality = input("Enter desired output quality (low,high):")
+        if export_quality in factories:
+            return factories[export_quality]
+        print ("Unknown output quality option: {export_quality}.")
+        
+def main() -> None:
+    """Main Function"""
+    
+    
+    fac = read_exporter()
+
+        
+    #retrieve the video exporters
+    video_exporter = fac.get_video_exporter()
+    audio_exporter = fac.get_audio_exporter()
+       
+    video_exporter.prepare_export("placeholder_for_video_data")
+    audio_exporter.prepare_export("placeholder_for_audio_data")
+    
+    folder = pathlib.Path("/usr/tmp/video")
+    video_exporter.do_export(folder)
+    audio_exporter.do_export(folder)
+        
+if __name__ == "__main__":
+    main()
+
+
+
