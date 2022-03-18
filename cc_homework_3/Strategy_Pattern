@@ -1,0 +1,70 @@
+import string
+import random
+from typing import List
+from abc import ABC, abstractmethod
+
+
+
+class BanAccount:
+        account: str
+        compplaint: str
+        
+        def __init__(self,account, complaint):
+            self.account = account
+            self.complaint = complaint
+
+
+
+
+def fifo_ordering(list: List[BanAccount]) -> List(BanAccount):
+    return list.copy()
+            
+
+def filo_ordering(list: List[BanAccount]) -> List(BanAccount):
+    list_copy = list.copy()
+    list_copy.reverse()
+    return list.copy()
+            
+                
+
+def random_ordering(list: List[BanAccount]) -> List(BanAccount):
+    list_copy = list.copy()
+    random.shuffle(list_copy)
+    return list.copy()
+    
+class AccountMisconduct:
+        
+        tickets: List[BanAccount] =[]
+        
+        def create_ticket(self,account,issue):
+            self.tickets.append(BanAccount(account, issue))
+            
+        def process_tickets(self, processing_strategy_fn):
+            
+            #create the list
+            ticket_list = processing_strategy_fn(self.tickets)
+            
+            #if empty
+            if len(ticket_list) == 0:
+                print("No Accounts to Ban")
+                return
+            
+           
+            for ticket in  ticket_list:
+                    self.process_ticket(ticket)
+
+                    
+        def process_ticket(self, ticket: BanAccount):
+            print("====================================")
+            print(f"Account:{ticket.account}")
+            print(f"issue:{ticket.complaint}")
+            print("====================================")
+            
+app = AccountMisconduct()
+    
+app.create_ticket("Abu Bakar", "Hoax information")
+app.create_ticket("Alia Ban", "Spam Call")
+app.create_ticket("John Lenen", "Fake Account")
+    
+app.process_tickets(fifo_ordering)
+    

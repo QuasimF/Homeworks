@@ -1,0 +1,51 @@
+
+class AccountDetails:
+    def __init__(self,username,age):
+        self.username = username
+        self.age = age
+        
+        
+    def __str__(self):
+        return f"Name:{self.username}  Age:{self.age}"
+    
+class Details:
+    def __init__(self):
+        self.name = []
+        
+    def add(self,name):
+        self.name.append(name)
+        
+    def remove (self):
+        return self.item.pop()
+    
+    def iterator(self):
+        return DetailsIterator(self.name)
+    
+class DetailsIterator:
+    def __init__(self,name):
+        self.indx = 0
+        self.name = name
+        
+    def has_next(self):
+        return False if self.indx >= len(self.name) else True
+    
+    def next(self):
+        name = self.name[self.indx]
+        self.indx += 1
+        return name
+    
+if __name__ == '__main__':
+    acc1 = AccountDetails("Abu Bakar", 23)
+    acc2 = AccountDetails("Ryley Jenkins", 20)
+    acc3 = AccountDetails("Ahamad Omar", 18)
+    
+    dete = Details()
+    dete.add(acc1)
+    dete.add(acc2)
+    dete.add(acc3)
+    
+    print("Accounts:")
+    iterator = dete.iterator()
+    while iterator.has_next():
+        account = iterator.next()
+        print(account)
